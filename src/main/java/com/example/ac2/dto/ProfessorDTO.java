@@ -1,21 +1,24 @@
 package com.example.ac2.dto;
 
 import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CursoDTO {
+public class ProfessorDTO {
     private Long id;
-    private String descricao;
-    private Integer cargaHoraria;
-    private String objetivo;
-    private String ementa;
-    private List<Long> professorList;
+    private String nome;
+    private String cpf;
+    private String rg;
+    private String endereco;
+    private String celular;
+    private List<Long> cursoList;
 }

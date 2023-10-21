@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ac2.model.Curso;
+import com.example.ac2.dto.CursoDTO;
 import com.example.ac2.service.CursoService;
 
 @RestController
@@ -23,12 +23,12 @@ public class CursoController {
     }
 
     @GetMapping
-    public List<Curso> findAllCurso(){
+    public List<CursoDTO> findAllCurso(){
         return cursoService.findAll();
     }
 
     @PostMapping
-    public Curso createCurso(@RequestBody Curso curso){
-        return cursoService.create(curso);
+    public void createCurso(@RequestBody CursoDTO curso){
+        cursoService.create(curso);
     }
 }
