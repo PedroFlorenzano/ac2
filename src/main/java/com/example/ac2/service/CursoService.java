@@ -5,9 +5,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.ac2.dto.CursoCreateDTO;
 import com.example.ac2.dto.CursoDTO;
+import com.example.ac2.dto.UpdateListLongDTO;
+import com.example.ac2.exceptions.RegraNegocioException;
 import com.example.ac2.model.Curso;
+import com.example.ac2.model.Professor;
 import com.example.ac2.repository.CursoRepository;
+import com.example.ac2.repository.ProfessorRepository;
 import com.example.ac2.service.contract.CursoServiceContract;
 
 @Service
@@ -15,8 +20,11 @@ public class CursoService implements CursoServiceContract {
 
     private CursoRepository cursoRepository;
 
-    public CursoService(CursoRepository cursoRepository) {
+    private ProfessorRepository professorRepository;
+
+    public CursoService(CursoRepository cursoRepository, ProfessorRepository professorRepository) {
         this.cursoRepository = cursoRepository;
+        this.professorRepository = professorRepository;
     }
 
     @Override
@@ -39,10 +47,9 @@ public class CursoService implements CursoServiceContract {
         .collect(Collectors.toList());
     }
 
-
-    //Fazer método para inserir um professor ou mais em um curso (PUT)
     @Override
-    public void create(CursoDTO curso) {
+    public void create(CursoCreateDTO curso) {
+
         Curso cursoSaved = Curso.builder()
             .id(curso.getId())
             .descricao(curso.getDescricao())
@@ -52,7 +59,20 @@ public class CursoService implements CursoServiceContract {
             .build();
 
         cursoRepository.save(cursoSaved);
-
     }
 
+    @Override
+    public void updateProfessores(Long id, UpdateListLongDTO professorList){
+
+        Curso cursoEncontrado = cursoRepository.findById(id).orElseThrow(() -> new RegraNegocioException("Não foi possível encontrar o ID do curso fornecido.")); 
+
+        List<Professor> professorListFound = professorRepository.findAllById(professorList.getLongList());
+
+        if(professorListFound.size() != professorList.getLongList().size()){
+            throw new RegraNegocioException("Um ou mais professores não foram encontrados dentro da lista.");
+        }
+
+        cursoEncontrado.setProfessorList(professorListFound);
+        cursoRepository.save(cursoEncontrado);
+    }
 }

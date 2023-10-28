@@ -10,4 +10,5 @@ import com.example.ac2.model.Professor;
 @Repository
 public interface ProfessorRepository extends JpaRepository<Professor, Long> {
     Optional<Professor> findByNome(String nome);
+    Optional<Professor> findByCpf(String cpf);
 }
